@@ -177,21 +177,30 @@ r = sqrt(wx**2+wy**2) - 0.35 # a1: 0.35
 # theta 2, 3
 ![image](theta2.png)
  Calculating Theta 2 and 3 using cosine law({\displaystyle c^{2}=a^{2}+b^{2}-2ab\cos \gamma}). A, B and C are sides of the triangle
+ 
 A = 1.5014 # d4
+
 B = sqrt(r**2+(wz-0.75)**2) # d1: 0.75
+
 C = 1.25 # a2
 
- a corresponds to angle alpha
+
+  - a corresponds to angle alpha
+ 
 a = acos((B**2 + C**2 - A**2) / (2*B*C))
+
 theta2 = pi/2 - a - atan2(wz-0.75, r) # d1: 0.75
 
- b corresponds to angle beta
+ - b corresponds to angle beta
+ 
 b = acos((A**2 + C**2 - B**2) / (2*A*C))
+
 theta3 = pi/2 - (b + 0.036)
 
 
 #Inverse Orientation problems
-![image](OrientationKinematics.png)
+
+![image](OrientationKenematics.png)
 
 
 
