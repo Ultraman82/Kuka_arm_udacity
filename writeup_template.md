@@ -35,17 +35,17 @@ T[i-1, i]  = R(​x[i-1], ​alpha[i-1]) ​*​ D(x​ [i-1], ​a[i-1]) ​*�
 4. Then, a translation along axis z[i] by d[i]
 Which results to the following matrix:
 
-joint | alpha | a | d | theta
---- | --- | --- | --- | ---
-1 | 0       | 0     | 0.75  | q1
-2 | -pi/2   | 0.35  | 0     | q2 - pi/2
-3 |  0      | 1.25  | 0     | q3
 
---- | --- | --- | ---
 cos(theta[i]) | -sin(theta[i]) | 0 a[i-1]
 sin(theta[i])*cos(alpha[i-1]) | cos(theta[i])*cos(alpha[i-1]) | -sin(alpha[i-1]) | -d[i]*sin(alpha[i-1])
 sin(theta[i])*sin(alpha[i-1]) | cos(theta[i])*sin(alpha[i-1]) | cos(alpha[i-1]) | d[i]*cos(alpha[i-1])
 0 | 0 | 0 | 1
+
+
+
+
+
+
 
 Substituting this matrix to the modified DH Parameters from the table above, we get the following transformation matrices about each joint with respect to the previous joint:
 
