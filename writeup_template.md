@@ -45,7 +45,7 @@ Which results to the following matrix:
 
 Substituting this matrix to the modified DH Parameters from the table above, we get the following transformation matrices about each joint with respect to the previous joint:
 
-T01
+T0_1
 
 
 cos(q1) | -sin(q1) | 0 | 0  
@@ -55,7 +55,7 @@ sin(q1) | cos(q1)|0 | 0
 0 |  0      | 0  | 1 
 
 
-T12
+T1_2
 
 sin(q2) |cos(q2) |0 |0.35 
 --- | --- | --- | --- 
@@ -63,7 +63,7 @@ sin(q2) |cos(q2) |0 |0.35
 cos(q2) |-sin(q2)|0 |0 
 0 |0 |0 |1 
 
-T23
+T2_3
 
 cos(q3) |-sin(q3)|0.0 |1.25 
 --- | --- | --- | --- 
@@ -71,7 +71,7 @@ sin(q3) |cos(q3) |0 |0
 0 |0 |1 |0 
 0 |0 |0 |1
 
-T34
+T3_4
 
 cos(q4) |-sin(q4)|0 |-0.054 
 --- | --- | --- | --- 
@@ -79,7 +79,7 @@ cos(q4) |-sin(q4)|0 |-0.054
 -sin(q4)|-cos(q4)|0 |0 
 0 |0 |0 |1 
 
-T45
+T4_5
 
 cos(q5) |-sin(q5)|0 |0 
 --- | --- | --- | --- 
@@ -87,7 +87,7 @@ cos(q5) |-sin(q5)|0 |0
 sin(q5) |cos(q5) |0 |0 
 0 |0 |0 |1 
 
-T56
+T5_6
 
 cos(q6) |-sin(q6)|0 |0 
 --- | --- | --- | --- 
@@ -95,7 +95,7 @@ cos(q6) |-sin(q6)|0 |0
 -sin(q6)|-cos(q6)|0 |0 
 0 |0 |0 |1 
 
-T6G
+T6_G
 
 1 |0 |0 |0 
 --- | --- | --- | --- 
@@ -198,9 +198,33 @@ b = acos((A**2 + C**2 - B**2) / (2*A*C))
 theta3 = pi/2 - (b + 0.036)
 
 
-#Inverse Orientation problems
+ # Inverse Orientation problems
 
 ![image](OrientationKenematics.png)
+
+	R0_6 = R0_1*R1_2*R2_3*R3_4*R4_5*R5_6
+
+Since the overall RPY (Roll Pitch Yaw) rotation between base_link and gripper_link must be equal to the product of individual rotations between respective links, following holds true:
+
+	R0_6 = ROT_EE
+
+where,
+
+ROT_EE = Homogeneous RPY rotation between base_link and gripper_link as calculated above.
+
+ We can substitute the values we calculated for joints 1 to 3 in their respective individual rotation matrices and pre-multiply both sides of the above equation by inv(R0_3) which leads to:
+
+	R3_6 = inv(R0_3) * ROT_EE
+ The resultant matrix on the RHS (Right Hand Side of the equation) does not have any variables after substituting the joint angle values, and hence comparing LHS (Left Hand Side of the equation) with RHS will result in equations for joint 4, 5, and 6.
+ 
+            R0_3 = T0_1[0:3,0:3] * T1_2[0:3,0:3] * T2_3[0:3,0:3]
+            R0_3 = R0_3.evalf(subs={q1: theta1, q2:theta2, q3: theta3})
+            R3_6 = R0_3.inv("LU") * ROT_EE
+	    
+            theta4 = atan2(R3_6[2,2], -R3_6[0,2])
+            theta5 = atan2(sqrt(R3_6[0,2]*R3_6[0,2] + R3_6[2,2]*R3_6[2,2]), R3_6[1,2])
+            theta6 = atan2(-R3_6[1,1], R3_6[1,0])
+
 
 
 
@@ -208,11 +232,18 @@ theta3 = pi/2 - (b + 0.036)
 
 #### 1. Fill in the `IK_server.py` file with properly commented python code for calculating Inverse Kinematics based on previously performed Kinematic Analysis. Your code must guide the robot to successfully complete 8/10 pick and place cycles. Briefly discuss the code you implemented and your results. 
 
+- Define parameters in synbolized from
+	d1, d2, d3, d4, d5, d6, d7 = symbols('d1:8')
+	
+- Define DH Transformation Matrix
+	DH_Table = {alpha0: 0, 	a0: 0, 		d1: 0.75, 	q1: q1,
 
-Here I'll talk about the code, what techniques I used, what worked and why, where the implementation might fail and how I might improve it if I were going to pursue this project further.  
+- Creates Homogeneous Transform Matrix from DH parameters
+	def TF_Matrix(alpha, a, d, q):
+    		TF = Matrix([
+I put the constant level of variables at out of the function to reduce calculation time.
 
+![image](success.png)
 
-And just for fun, another example image:
-![alt text][image3]
 
 
