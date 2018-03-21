@@ -33,71 +33,26 @@ T[i-1, i]  = R(​x[i-1], ​alpha[i-1]) ​*​ D(x​ [i-1], ​a[i-1]) ​*�
 2. Then, a translation along x[i-1] by a[i-1]
 3. Then, a rotation about resulting axis z[i] by theta[i]
 4. Then, a translation along axis z[i] by d[i]
+
 Which results to the following matrix:
 
-
-
-
-cos(theta[i]) | -sin(theta[i]) | 0 | a[i-1]
---- | --- | --- | --- | ---
-1 | 0       | 0     | 0.75  | q1
-2 | -pi/2   | 0.35  | 0     | q2 - pi/2
-
- |  | 0 
-sin(theta[i])*cos(alpha[i-1]) | cos(theta[i])*cos(alpha[i-1]) | -sin(alpha[i-1]) | -d[i]*sin(alpha[i-1])
-sin(theta[i])*sin(alpha[i-1]) | cos(theta[i])*sin(alpha[i-1]) | cos(alpha[i-1]) | d[i]*cos(alpha[i-1])
-0 | 0 | 0 | 1
-
-
-
-
-
-
+    TF = Matrix([
+            [cos(q), 		-sin(q), 		0, 		a],
+    		[sin(q)*cos(alpha), 	cos(q)*cos(alpha), 	-sin(alpha), 	-sin(alpha)*d],
+    		[sin(q)* sin(alpha), 	cos(q)*sin(alpha), 	cos(alpha), 	cos(alpha)*d],
+    		[0,			0,			0,		1]
+    ])
+    
 
 Substituting this matrix to the modified DH Parameters from the table above, we get the following transformation matrices about each joint with respect to the previous joint:
 
-T01
-|cos(q1) |-sin(q1)|0 |0 |
-|sin(q1) |cos(q1) |0 |0 |
-|0 |0 |1 |0.75 |
-|0 |0 |0 |1 |
+joint | alpha | a | d 
+--- | --- | --- | --- 
+1 | 0       | 0     
+2 | -pi/2   | 0.35    
+3 |  0      | 1.25    
 
 
-T12
-|sin(q2) |cos(q2) |0 |0.35 |
-|0 |0 |1 |0 |
-|cos(q2) |-sin(q2)|0 |0 |
-|0 |0 |0 |1 |
-
-T23
-|cos(q3) |-sin(q3)|0.0 |1.25 |
-|sin(q3) |cos(q3) |0 |0 |
-|0 |0 |1 |0 |
-|0 |0 |0 |1 |
-
-T34
-|cos(q4) |-sin(q4)|0 |-0.054 |
-|0 |0 |1 |1.5 |
-|-sin(q4)|-cos(q4)|0 |0 |
-|0 |0 |0 |1 |
-
-T45
-|cos(q5) |-sin(q5)|0 |0 |
-|0 |0 |-1 |0 |
-|sin(q5) |cos(q5) |0 |0 |
-|0 |0 |0 |1 |
-
-T56
-|cos(q6) |-sin(q6)|0 |0 |
-|0 |0 |1 |0 |
-|-sin(q6)|-cos(q6)|0 |0 |
-|0 |0 |0 |1 |
-
-T6g
-|1 |0 |0 |0 |
-|0 |1 |0 |0 |
-|0 |0 |1 |0.303 |
-|0 |0 |0 |1 |
 
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
