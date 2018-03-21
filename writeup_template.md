@@ -104,13 +104,79 @@ T6G
 0 |0 |0 |1 
 
 
+# Generalized homogeneous transform
+T0G = T01 * T12 * T23 * T34 * T45 * T56 * T6G
+
 
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
+ 
+# Inverse Position problem.
+ 
 
-And here's where you can draw out and show your math for the derivation of your theta angles. 
+- There is discrepancy between urdf and gazebo, so we need to compensate it.
 
-![alt text][image2]
+![image](discrepency.png)
+
+# Compensate for rotation discrepancy between DH parameters and Gazebo
+
+Rot_Error = ROT_z.subs(y, radians(180)) * ROT_y.subs(p, radians(-90))
+
+- To find wrist center(WC), applied a translation on the oppsite direction of the gripper
+
+![image](GripperFrame.png)
+
+The equation below calculates the wrist center by applying a translation on the opposite direction of the gripper:
+
+![image](GripperFunction.png)
+
+Px, Py, Pz = end-effector positions
+
+Wx, Wy, Wz = wrist positions
+
+d6 = from DH table
+
+l = end-effector length
+
+
+# Calculating the Rotation Matrix for the Gripper
+- Rotation matrices
+
+ROT_x = Matrix([[1, 0 , 0],
+    [0, cos(r), -sin(r)],
+	[0, sin(r), cos(r)]]) # ROLL
+
+ROT_y = Matrix([
+    [cos(p), 	0 , 	sin(p)],
+    [0, 		1, 	0],
+	[-sin(p), 	0, 	cos(p)]]) # PITCH
+
+ROT_z = Matrix([[cos(y), -sin(y), 0],
+    [sin(y), cos(y), 0],
+    [0, 0, 1]]) # YAW
+
+ROT_EE = ROT_z * ROT_y * ROT_x
+
+Rot_Error = ROT_z.subs(y, radians(180)) * ROT_y.subs(p, radians(-90))
+
+# adjusting discrepancy
+ROT_EE = ROT_EE * Rot_Error
+
+
+![image](WcFunction.png)
+
+- Calculate the wrist center(WC) position(dG = .303)
+
+            EE = Matrix([[px], [py], [pz]])
+
+            WC = EE - (0.303) * ROT_EE[:,2]
+
+
+
+#Inverse Orientation problems
+
+
+
 
 ### Project Implementation
 
