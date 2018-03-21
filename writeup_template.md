@@ -9,14 +9,16 @@
 ​ d = arm link offset
 ​ θ = arm joint angle
 
-joint	alpha	a	d	theta
-1	0	0	0.75	q1
-2	-pi/2	0.35	0	q2 - pi/2
-3	0	1.25	0	q3
-4	-pi/2	-0.054	1.50	q4
-5	pi/2	0	0	q5
-6	-pi/2	0	0	q6
-gripper	0	0	0.303	0
+
+joint | alpha | a | d | theta
+--- | --- | --- | --- | ---
+1 | 0       | 0     | 0.75  | q1
+2 | -pi/2   | 0.35  | 0     | q2 - pi/2
+3 |  0      | 1.25  | 0     | q3
+4 | -pi/2   |-0.054 | 1.50  | q4
+5 |  pi/2   | 0     | 0     | q5
+6 | -pi/2   | 0     | 0     | q6
+gripper | 0 | 0     | 0.303 | 0
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
