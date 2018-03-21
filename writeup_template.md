@@ -41,7 +41,7 @@ joint | alpha | a | d | theta
 2 | -pi/2   | 0.35  | 0     | q2 - pi/2
 3 |  0      | 1.25  | 0     | q3
 
-
+--- | --- | --- | ---
 cos(theta[i]) | -sin(theta[i]) | 0 a[i-1]
 sin(theta[i])*cos(alpha[i-1]) | cos(theta[i])*cos(alpha[i-1]) | -sin(alpha[i-1]) | -d[i]*sin(alpha[i-1])
 sin(theta[i])*sin(alpha[i-1]) | cos(theta[i])*sin(alpha[i-1]) | cos(alpha[i-1]) | d[i]*cos(alpha[i-1])
