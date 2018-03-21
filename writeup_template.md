@@ -21,6 +21,55 @@ joint | alpha | a | d | theta
 gripper | 0 | 0     | 0.303 | 0
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
+Pose (homogeneous transformation matrix) of coordinate-frame of joint b ​with respect to
+coordinate- frame of joint a ​which represents both rotation and translation
+
+Given the modified DH parameters the pose of a joint frame i​ with respect to the previous joint frame i-1 ​can be constructed as a
+sequence of four basic transformations:
+T[i-1, i] R(​x[i-1], ​alpha[i-1]) ​*​ D(x​ [i-1], ​a[i-1]) ​*​ R(​z[i], ​theta[i]) ​*​ D(​z[i], ​d[i])
+1. First, a rotation about x[i-1] by alpha[i-1]
+2. Then, a translation along x[i-1] by a[i-1]
+3. Then, a rotation about resulting axis z[i] by theta[i]
+4. Then, a translation along axis z[i] by d[i]
+Which results to the following matrix:
+cos(theta[i]) -sin(theta[i]) 0 a[i-1]
+sin(theta[i])*cos(alpha[i-1]) cos(theta[i])*cos(alpha[i-1]) -sin(alpha[i-1]) -d[i]*sin(alpha[i-1])
+sin(theta[i])*sin(alpha[i-1]) cos(theta[i])*sin(alpha[i-1]) cos(alpha[i-1]) d[i]*cos(alpha[i-1])
+0 0 0 1
+Substituting this matrix to the modified DH Parameters from the table above, we get the following transformation matrices about
+each joint with respect to the previous joint:
+T01 T12
+|cos(q1) |-sin(q1)|0 |0 |
+|sin(q1) |cos(q1) |0 |0 |
+|0 |0 |1 |0.75 |
+|0 |0 |0 |1 |
+|sin(q2) |cos(q2) |0 |0.35 |
+|0 |0 |1 |0 |
+|cos(q2) |-sin(q2)|0 |0 |
+|0 |0 |0 |1 |
+T23 T34
+|cos(q3) |-sin(q3)|0.0 |1.25 |
+|sin(q3) |cos(q3) |0 |0 |
+|0 |0 |1 |0 |
+|0 |0 |0 |1 |
+|cos(q4) |-sin(q4)|0 |-0.054 |
+|0 |0 |1 |1.5 |
+|-sin(q4)|-cos(q4)|0 |0 |
+|0 |0 |0 |1 |
+T45 T56
+|cos(q5) |-sin(q5)|0 |0 |
+|0 |0 |-1 |0 |
+|sin(q5) |cos(q5) |0 |0 |
+|0 |0 |0 |1 |
+|cos(q6) |-sin(q6)|0 |0 |
+|0 |0 |1 |0 |
+|-sin(q6)|-cos(q6)|0 |0 |
+|0 |0 |0 |1 |
+T6g
+|1 |0 |0 |0 |
+|0 |1 |0 |0 |
+|0 |0 |1 |0.303 |
+|0 |0 |0 |1 |
 
 
 
