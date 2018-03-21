@@ -47,7 +47,6 @@ Which results to the following matrix:
 Substituting this matrix to the modified DH Parameters from the table above, we get the following transformation matrices about each joint with respect to the previous joint:
 
 T01
-
 cos(q1) | -sin(q1) | 0 | 0 
 --- | --- | --- | --- 
 sin(q1) | cos(q1)|0 | 0     
