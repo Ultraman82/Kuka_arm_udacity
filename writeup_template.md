@@ -22,13 +22,13 @@ gripper | 0 | 0     | 0.303 | 0
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
-T[i-1, i] = Pose (homogeneous transformation matrix) of coordinate-frame of joint b ​with respect to
-coordinate- frame of joint a ​which represents both rotation and translation
+T[i-1, i] = Pose (homogeneous transformation matrix) of coordinate-frame of joint b​ with respect to
+coordinate- frame of joint a​ which represents both rotation and translation
 
-Given the modified DH parameters the pose of a joint frame i​ with respect to the previous joint frame i-1 ​can be constructed as a
+Given the modified DH parameters the pose of a joint frame i with respect to the previous joint frame i-1 can be constructed as a
 sequence of four basic transformations:
 
-T[i-1, i]  = R(​x[i-1], ​alpha[i-1]) ​*​ D(x​ [i-1], ​a[i-1]) ​*​ R(​z[i], ​theta[i]) ​*​ D(​z[i], ​d[i])
+T[i-1, i]  = R(​x[i-1], ​alpha[i-1]) ​* D(x​ [i-1], ​a[i-1]) ​* R(​z[i], ​theta[i]) ​* D(​z[i], ​d[i])
 1. First, a rotation about x[i-1] by alpha[i-1]
 2. Then, a translation along x[i-1] by a[i-1]
 3. Then, a rotation about resulting axis z[i] by theta[i]
