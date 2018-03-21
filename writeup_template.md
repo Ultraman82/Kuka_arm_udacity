@@ -112,9 +112,29 @@ T0G = T01 * T12 * T23 * T34 * T45 * T56 * T6G
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
  
 # Inverse Position problem.
- 
 
-- There is discrepancy between urdf and gazebo, so we need to compensate it.
+ Since we have the case of a spherical wrist involving joints 4,5,6, the position of the wrist center is governed by the first three joints. We can obtain the position of the wrist center by using the complete transformation matrix 
+ 
+![image](WcSymbol.png)
+
+where l, m and n are orthonormal vectors representing the end-effector orientation along X, Y, Z axes of the local coordinate frame.
+
+Since n is the vector along the z-axis of the gripper_link, we can say the following:
+
+
+![image](WcFunction.png)
+
+Where,
+
+Px, Py, Pz = end-effector positions
+
+Wx, Wy, Wz = wrist positions
+
+d6 = from DH table
+
+l = end-effector length
+
+
 
 ![image](discrepency.png)
 
@@ -138,8 +158,8 @@ d6 = from DH table
 
 l = end-effector length
 
+Now, in order to calculate nx, ny, and nz, let's continue from the previous section where we calculated the rotation matrix to correct the difference between the URDF and the DH reference frames for the end-effector.
 
-# Calculating the Rotation Matrix for the Gripper
 - Rotation matrices
 
 ROT_x = Matrix([[1, 0 , 0],
@@ -157,19 +177,25 @@ ROT_z = Matrix([[cos(y), -sin(y), 0],
 
 ROT_EE = ROT_z * ROT_y * ROT_x
 
-Rot_Error = ROT_z.subs(y, radians(180)) * ROT_y.subs(p, radians(-90))
+- 180 degree counterclockwise rotation and 90degree clockwise rotation
+	Rot_Error = ROT_z.subs(y, radians(180)) * ROT_y.subs(p, radians(-90))
+	ROT_EE = ROT_EE * Rot_Error
 
-# adjusting discrepancy
-ROT_EE = ROT_EE * Rot_Error
+	Extract end-effector position and orientation from request. But since roll, pitch, and yaw values for the gripper are returned in quaternions, we can use the transformations.py module from the TF package.
+Now that we can know WC.
 
-
-![image](WcFunction.png)
-
-- Calculate the wrist center(WC) position(dG = .303)
+            ROT_EE = ROT_EE.subs({'r': roll, 'p': pitch, 'y': yaw})
 
             EE = Matrix([[px], [py], [pz]])
 
             WC = EE - (0.303) * ROT_EE[:,2]
+
+
+# theta 1
+![image](theta1.png)
+
+# theta 2, 3
+![image](theta2.png)
 
 
 
