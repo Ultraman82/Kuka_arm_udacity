@@ -134,30 +134,6 @@ d6 = from DH table
 
 l = end-effector length
 
-
-
-![image](discrepency.png)
-
-# Compensate for rotation discrepancy between DH parameters and Gazebo
-
-Rot_Error = ROT_z.subs(y, radians(180)) * ROT_y.subs(p, radians(-90))
-
-- To find wrist center(WC), applied a translation on the oppsite direction of the gripper
-
-![image](GripperFrame.png)
-
-The equation below calculates the wrist center by applying a translation on the opposite direction of the gripper:
-
-![image](GripperFunction.png)
-
-Px, Py, Pz = end-effector positions
-
-Wx, Wy, Wz = wrist positions
-
-d6 = from DH table
-
-l = end-effector length
-
 Now, in order to calculate nx, ny, and nz, let's continue from the previous section where we calculated the rotation matrix to correct the difference between the URDF and the DH reference frames for the end-effector.
 
 - Rotation matrices
@@ -193,14 +169,29 @@ Now that we can know WC.
 
 # theta 1
 ![image](theta1.png)
+θ1 = atan(yc.xc)
+ Calculate Radius from above (will be used later)
+r = sqrt(wx**2+wy**2) - 0.35 # a1: 0.35
+
 
 # theta 2, 3
 ![image](theta2.png)
+ Calculating Theta 2 and 3 using cosine law({\displaystyle c^{2}=a^{2}+b^{2}-2ab\cos \gamma}). A, B and C are sides of the triangle
+A = 1.5014 # d4
+B = sqrt(r**2+(wz-0.75)**2) # d1: 0.75
+C = 1.25 # a2
 
+ a corresponds to angle alpha
+a = acos((B**2 + C**2 - A**2) / (2*B*C))
+theta2 = pi/2 - a - atan2(wz-0.75, r) # d1: 0.75
+
+ b corresponds to angle beta
+b = acos((A**2 + C**2 - B**2) / (2*A*C))
+theta3 = pi/2 - (b + 0.036)
 
 
 #Inverse Orientation problems
-
+![image](OrientationKinematics.png)
 
 
 
